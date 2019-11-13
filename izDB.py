@@ -95,20 +95,23 @@ def foolCaptcha(iterator):
 # gets all material and generates pdf
 def processPage(urlLink, fileName, titl):
     global db
+
+    # get html
+    # options for PDFkit
+    options = {
+        'quiet': ''
+    }
+
     text = soup(req.get(urlLink).text, 'lxml')
     links = ''
 
-    if (text.find_all(class_='grid')):
+    if text.find_all(class_='grid'):
 
-        bmw_no = ''
+        # get title
         bmw_title = ''
-        if (text.find_all(class_='AWNUMBER')):
-            bmw_no = str(text.find(class_='AWNUMBER').string)
-        if (text.find_all(class_='docnr')):
-            bmw_no = str(text.find(class_='docnr').string)
-        if (text.find_all(class_='title')):
+        if text.find_all(class_='title'):
             bmw_title = str(text.find(class_='title').string)
-        if (text.find_all(class_='TITLE')):
+        if text.find_all(class_='TITLE'):
             bmw_title = str(text.find(class_='TITLE').string)
 
         # get full navlink for title
@@ -140,12 +143,6 @@ def processPage(urlLink, fileName, titl):
         # adding header with css links (ters) on main body (bodyR)
         ters = str(text.find('head'))
         bodyR = ters + str(text.find(class_='content'))
-
-        # get html
-        # options for PDFkit
-        options = {
-            'quiet': ''
-        }
 
         # generate html file
         with open(fileName + '.html', 'w', encoding='utf-8-sig') as file:
